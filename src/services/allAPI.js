@@ -1,6 +1,6 @@
 import commonAPI from "./commonAPI";
 
-const BASE_URL = "https://student-backend-snbo.onrender.com";
+const BASE_URL = "https://student-backend-snbo.onrender.com/api";
 
 // add
 export const addStudentAPI = async (data) => {
