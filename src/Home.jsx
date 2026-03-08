@@ -8,6 +8,7 @@ import {
 
 function Home() {
   const [students, setStudents] = useState([]);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -29,6 +30,25 @@ function Home() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { name, email, course, phone } = form;
+    if (!name || !email || !course || !phone) {
+      setError("All fields are required");
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      setError("Invalid email format");
+      return;
+    }
+
+    if (phone.length < 10) {
+      setError("Phone must be at least 10 digits");
+      return;
+    }
+
+    setError("");
     if (editId) {
       await updateStudentAPI(editId, form);
       setEditId(null);
@@ -62,6 +82,9 @@ function Home() {
 
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-10">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">Student Management System</h1>
+      {error && (
+        <p className="text-red-600 mb-4 font-semibold">{error}</p>
+      )}
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl grid grid-cols-2 gap-4">
@@ -70,25 +93,25 @@ function Home() {
           placeholder="Name"
           value={form.name}
           onChange={handleChange}
-          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900"/>
+          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900" />
         <input
           name="email"
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
-          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900"/>
+          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900" />
         <input
           name="course"
           placeholder="Course"
           value={form.course}
           onChange={handleChange}
-          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900"/>
+          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900" />
         <input
           name="phone"
           placeholder="Phone"
           value={form.phone}
           onChange={handleChange}
-          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900"/>
+          className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-900" />
         <div className="col-span-2 flex justify-center mt-2">
           <button
             type="submit"
